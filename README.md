@@ -1,4 +1,4 @@
-# pyCiscoSpark
+# CiscoSpark.Net
 ==============
 Python Library to Interface to Cisco Spark REST API
 ---------------------------------------------------
