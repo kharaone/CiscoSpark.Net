@@ -106,9 +106,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\rtcciscospark - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\rtcciscospark - Web Deploy.pubxml" />
-    <Content Include="Properties\PublishProfiles\rtcciscospark.PublishSettings" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
