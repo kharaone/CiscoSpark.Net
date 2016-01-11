@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiscoSpark.Net", "CiscoSpar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiscoSpark.SDK", "CiscoSpark.SDK\CiscoSpark.SDK.csproj", "{A2A5BA44-C711-45B8-9CFE-D789B95D5EED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiscoSpark.Sample", "CiscoSpark.Sample\CiscoSpark.Sample.csproj", "{8AF6A07D-B54B-4D4A-90CF-65D4B2BBEFD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A2A5BA44-C711-45B8-9CFE-D789B95D5EED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2A5BA44-C711-45B8-9CFE-D789B95D5EED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2A5BA44-C711-45B8-9CFE-D789B95D5EED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AF6A07D-B54B-4D4A-90CF-65D4B2BBEFD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AF6A07D-B54B-4D4A-90CF-65D4B2BBEFD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AF6A07D-B54B-4D4A-90CF-65D4B2BBEFD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AF6A07D-B54B-4D4A-90CF-65D4B2BBEFD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
