@@ -74,5 +74,10 @@ namespace CiscoSpark.SDK
                 _client.Delete(_pathBuilder.ToString());
             }
         }
+
+        public IEnumerable<T> iterate()
+        {
+            return _url == null ? _client.List<T>(_pathBuilder.ToString(), _parameters) : _client.List<T>(_url);
+        }
     }
 }

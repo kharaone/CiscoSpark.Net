@@ -70,15 +70,35 @@ namespace CiscoSpark.SDK
             return JsonConvert.DeserializeObject<T>(Request(url, "GET", new T()).Content.ReadAsStringAsync().Result);
         }
 
-        //private IEnumerator<T> list<T>(string path, List<string[]> parameters)
-        //{
-        //    return new PagingIterator<T>(GetUri(path, parameters));
-        //}
+        public class DataJsonAttributeContainer<T>
+        {
+            public List<T> Items { get; set; }
+        }
 
-        //private IEnumerator<T> list<T>(Uri url)
-        //{
-        //    return new PagingIterator<T>(url);
-        //}
+        public T DeserializeFromJson<T>(string json)
+        {
+            T deserializedProduct = JsonConvert.DeserializeObject<T>(json);
+            return deserializedProduct;
+        }
+
+        public IEnumerable<T> List<T>(string path, List<string[]> parameters) where T : new()
+        {
+            return List<T>(GetUri(path, parameters));
+        }
+
+        public IEnumerable<T> List<T>(Uri url) where T : new()
+        {
+            try
+            {
+                var container = DeserializeFromJson<DataJsonAttributeContainer<T>>(Request(url, "GET", new T()).Content.ReadAsStringAsync().Result);
+                return container.Items;
+            }
+            catch (IOException ex)
+            {
+                throw new SparkException(ex);
+            }
+
+        }
 
         public void Delete(string path)
         {
