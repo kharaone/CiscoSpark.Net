@@ -36,7 +36,7 @@ namespace CiscoSpark.Sample
             // Add a coworker to the room
             Membership membership = new Membership();
             membership.RoomId = room.Id;
-            membership.PersonEmail = "wile_e_coyote@acme.com";
+            membership.PersonEmail = "gfontaine@blizzard.com";
             spark.Memberships().Post(membership);
 
 
@@ -59,7 +59,7 @@ namespace CiscoSpark.Sample
             // Share a file with the room
             message = new Message();
             message.RoomId = room.Id;
-            message.Files = new[] {new Uri("http://example.com/hello_world.jpg")};
+            message.Files = new[] {new Uri("http://www.webex.co.uk/ciscospark/includes/images/media_2.png") };
             spark.Messages().Post(message);
         }
 

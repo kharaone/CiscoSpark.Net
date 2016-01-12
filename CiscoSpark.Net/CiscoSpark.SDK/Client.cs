@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Web;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NLog;
 
 namespace CiscoSpark.SDK
@@ -47,7 +48,7 @@ namespace CiscoSpark.SDK
 
         public T Post<T>(Uri url, T body)
         {
-            return JsonConvert.DeserializeObject<T>(Request(url, "POST", body).Content.ReadAsStringAsync().Result);
+            return JsonConvert.DeserializeObject<T>(Request(url, "POST", body));
         }
 
         public T Put<T>(string path, T body)
@@ -57,17 +58,17 @@ namespace CiscoSpark.SDK
 
         public T Put<T>(Uri url, T body)
         {
-            return JsonConvert.DeserializeObject<T>(Request(url, "PUT", body).Content.ReadAsStringAsync().Result);
+            return JsonConvert.DeserializeObject<T>(Request(url, "PUT", body));
         }
 
         public T Get<T>(string path, List<string[]> parameters) where T : new()
         {
-            return JsonConvert.DeserializeObject<T>(Request("PUT", path, parameters, new T()));
+            return JsonConvert.DeserializeObject<T>(Request("GET", path, parameters, new T()));
         }
 
         public T Get<T>(Uri url) where T : new()
         {
-            return JsonConvert.DeserializeObject<T>(Request(url, "GET", new T()).Content.ReadAsStringAsync().Result);
+            return JsonConvert.DeserializeObject<T>(Request(url, "GET", new T()));
         }
 
         public class DataJsonAttributeContainer<T>
@@ -90,7 +91,7 @@ namespace CiscoSpark.SDK
         {
             try
             {
-                var container = DeserializeFromJson<DataJsonAttributeContainer<T>>(Request(url, "GET", new T()).Content.ReadAsStringAsync().Result);
+                var container = DeserializeFromJson<DataJsonAttributeContainer<T>>(Request(url, "GET", new T()));
                 return container.Items;
             }
             catch (IOException ex)
@@ -181,7 +182,7 @@ namespace CiscoSpark.SDK
                         errorMessageBuilder.Append(responseMessage);
                     }
                 }
-                catch (IOException ex)
+                catch (IOException)
                 {
                     // ignore
                 }
@@ -199,7 +200,7 @@ namespace CiscoSpark.SDK
         {
 
             var client = new HttpClient(new HttpClientHandler());
-            client.DefaultRequestHeaders.Add("Content-type", "application/json");
+            //client.DefaultRequestHeaders.Add("Content-type", "application/json");
             if (_accessToken != null) {
                 string authorization = _accessToken;
                 if (!authorization.StartsWith("Bearer "))
@@ -217,10 +218,10 @@ namespace CiscoSpark.SDK
         private string Request<T>(string method, string path, List<string[]> parameters, T body)
         {
             var url = GetUri(path, parameters);
-            return Request(url, method, body).Content.ReadAsStringAsync().Result;
+            return Request(url, method, body);
         }
 
-        public Response Request<T>(Uri uri, string method, T body)
+        public string Request<T>(Uri uri, string method, T body)
         {
             if (_accessToken == null)
             {
@@ -244,9 +245,63 @@ namespace CiscoSpark.SDK
             }
         }
 
-        private Response DoRequest(Uri uri, string method, object body)
+        private string DoRequest(Uri url, string method, object body)
         {
-            throw new NotImplementedException();
+            try
+            {
+                HttpClient connection = GetConnection(url);
+                HttpResponseMessage response;
+                var trackingId = connection.DefaultRequestHeaders.GetValues(_trackingId).Single();
+
+                if (_logger != null)
+                {
+                    _logger.Info("Request {0}: {1} {2}", trackingId, method, connection.BaseAddress);
+                }
+                var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+                var bodyJSON = JsonConvert.SerializeObject(body, settings);
+                if (_logger != null)
+                {
+                    _logger.Info("Request Body {0}: {1}", trackingId, bodyJSON);
+
+                }
+                response = Query(url, bodyJSON, connection, method);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    int responseCode = (int)response.StatusCode;
+                    if (_logger != null)
+                    {
+                        _logger.Info("Response {0}: {1} {2}", trackingId, responseCode,
+                            response.Content.ReadAsStringAsync().Result);
+                    }
+
+                }
+                return response.Content.ReadAsStringAsync().Result;
+
+            }
+            catch (IOException io)
+            {
+                throw new SparkException("io error", io);
+            }
+            catch(Exception ex)
+            {
+                throw new SparkException("An error occurred during the request", ex);
+            }
+        }
+
+        private HttpResponseMessage Query(Uri url, string bodyJson, HttpClient connection, string method)
+        {
+            switch (method)
+            {
+                case "GET":
+                    return connection.GetAsync(url).Result;
+                case "POST":
+                    return connection.PostAsync(url, new StringContent(bodyJson, Encoding.UTF8, "application/json")).Result;
+                case "PUT":
+                    return connection.PostAsync(url, new StringContent(bodyJson, Encoding.UTF8, "application/json")).Result;
+            }
+            return null;
         }
 
         private bool Authenticate()
@@ -254,84 +309,6 @@ namespace CiscoSpark.SDK
             throw new NotImplementedException();
         }
 
-        private class ErrorMessage
-        {
-            public string Message;
-            string _trackingId;
-        }
 
-        public class Response : HttpResponseMessage
-        {
-            public string GetHeaderField(string link)
-            {
-                return Headers.Single(pair => pair.Key.Equals(link)).Value.First();
-            }
-        }
-
-        //public class PagingIterator<T> : IEnumerator<T> where T:new() 
-        //{
-        //    private readonly Type clazz;
-        //    private HttpClient connection;
-        //    private Uri url;
-
-        //    public PagingIterator(Type clazz, Uri url)
-        //    {
-        //        this.clazz = clazz;
-        //        this.url = url;
-        //    }
-
-        //    public T Current { get; set; }
-
-        //    object IEnumerator.Current
-        //    {
-        //        get { return Current; }
-        //    }
-
-        //    public void Dispose()
-        //    {
-        //    }
-
-        //    public bool MoveNext()
-        //    {
-        //        try
-        //        {
-        //            if (Current == null)
-        //            {
-        //                if (parser == null)
-        //                {
-        //                    Response response = Request(url, "GET", new T());
-        //                    InputStream inputStream = response.inputStream;
-        //                    connection = response.connection;
-        //                    parser = Json.createParser(inputStream);
-
-        //                    scrollToItemsArray(parser);
-        //                }
-
-        //                JsonParser.Event event = parser.next();
-        //                if (event != JsonParser.Event.START_OBJECT)
-        //                {
-        //                    HttpURLConnection next = getLink(connection, "next");
-        //                    if (next == null || next.getURL().@equals(url))
-        //                    {
-        //                        return false;
-        //                    }
-        //                    connection = next;
-        //                    url = connection.getURL();
-        //                    parser = null;
-        //                    return hasNext();
-        //                }
-        //                Current = readObject(clazz, parser);
-        //            }
-        //            return Current != null;
-        //        }
-        //        catch (IOException ex)
-        //        {
-        //            throw new SparkException(ex);
-        //        }
-        //    }
-
-        //    public void Reset()
-        //    {}
-        //}
     }
 }

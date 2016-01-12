@@ -15,17 +15,17 @@
 
         public override IRequestBuilder<Membership> Memberships()
         {
-            return new RequestBuilder<Membership>(_client, "/webhooks");
+            return new RequestBuilder<Membership>(_client, "/memberships");
         }
 
         public override IRequestBuilder<Message> Messages()
         {
-            return new RequestBuilder<Message>(_client, "/webhooks");
+            return new RequestBuilder<Message>(_client, "/messages");
         }
 
         public override IRequestBuilder<Person> People()
         {
-            return new RequestBuilder<Person>(_client, "/webhooks");
+            return new RequestBuilder<Person>(_client, "/people");
         }
 
         public override IRequestBuilder<Webhook> Webhooks()
