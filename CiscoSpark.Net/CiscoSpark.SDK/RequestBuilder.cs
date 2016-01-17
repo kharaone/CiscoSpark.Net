@@ -36,7 +36,7 @@ namespace CiscoSpark.SDK
             return this;
         }
 
-        public IRequestBuilder<TNewType> Path<TNewType>(string path, TNewType clazz) where TNewType : new()
+        public IRequestBuilder<TNewType> Path<TNewType>(string path) where TNewType : new()
         {
             _pathBuilder.Append(path);
             return new RequestBuilder<TNewType>(_client, _pathBuilder, _parameters);

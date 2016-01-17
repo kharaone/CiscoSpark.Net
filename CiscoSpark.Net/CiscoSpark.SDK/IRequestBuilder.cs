@@ -10,7 +10,7 @@ namespace CiscoSpark.SDK
     {
         IRequestBuilder<T> QueryParam(string key, string value);
         IRequestBuilder<T> Path(params object[] paths);
-        IRequestBuilder<TNewType> Path<TNewType>(string path, TNewType clazz) where TNewType : new();
+        IRequestBuilder<TNewType> Path<TNewType>(string path) where TNewType : new();
         IRequestBuilder<T> Url(Uri url);
         T Post(T body);
         T Put(T body);
