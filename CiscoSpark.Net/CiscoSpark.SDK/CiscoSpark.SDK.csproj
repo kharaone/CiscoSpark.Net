@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="IRequestBuilder.cs" />
-    <Compile Include="MalformedUrlException.cs" />
     <Compile Include="Membership.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="NotAuthenticatedException.cs" />
@@ -59,7 +58,6 @@
     <Compile Include="Spark.cs" />
     <Compile Include="SparkException.cs" />
     <Compile Include="SparkConcrete.cs" />
-    <Compile Include="UnsupportedEncodingException.cs" />
     <Compile Include="Webhook.cs" />
   </ItemGroup>
   <ItemGroup>

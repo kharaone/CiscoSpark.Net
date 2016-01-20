@@ -27,49 +27,49 @@ namespace CiscoSpark.SDK
 
             public Builder BaseUrl(Uri uri)
             {
-                this._baseUrl = uri;
+                _baseUrl = uri;
                 return this;
             }
 
             public Builder RedirectUri(Uri uri)
             {
-                this._redirectUri = uri;
+                _redirectUri = uri;
                 return this;
             }
 
             public Builder AuthCode(string code)
             {
-                this._authCode = code;
+                _authCode = code;
                 return this;
             }
 
             public Builder AccessToken(string accessToken)
             {
-                this._accessToken = accessToken;
+                _accessToken = accessToken;
                 return this;
             }
 
             public Builder RefreshToken(string refreshToken)
             {
-                this._refreshToken = refreshToken;
+                _refreshToken = refreshToken;
                 return this;
             }
 
             public Builder ClientId(string clientId)
             {
-                this._clientId = clientId;
+                _clientId = clientId;
                 return this;
             }
 
             public Builder ClientSecret(string clientSecret)
             {
-                this._clientSecret = clientSecret;
+                _clientSecret = clientSecret;
                 return this;
             }
 
             public Builder Logger(Logger logger)
             {
-                this._logger = logger;
+                _logger = logger;
                 return this;
             }
 

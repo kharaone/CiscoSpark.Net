@@ -22,44 +22,49 @@ namespace CiscoSpark.Sample
 
             // List the rooms that I'm in
             spark.Rooms()
-                .iterate()
+                .Iterate()
                 .ToList().ForEach(r => {
                                            Console.WriteLine("{0}, created {1}: {2}", r.Title, r.Created, r.Id);
                 });
 
             // Create a new room
-            Room room = new Room();
-            room.Title = "Hello World";
+            Room room = new Room {Title = "Hello World"};
             room = spark.Rooms().Post(room);
 
 
             // Add a coworker to the room
-            Membership membership = new Membership();
-            membership.RoomId = room.Id;
-            membership.PersonEmail = "gfontaine@blizzard.com";
+            Membership membership = new Membership
+            {
+                RoomId = room.Id,
+                PersonEmail = "gfontaine@blizzard.com"
+            };
             spark.Memberships().Post(membership);
 
 
             // List the members of the room
             spark.Memberships()
                 .QueryParam("roomId", room.Id)
-                .iterate().ToList()
+                .Iterate().ToList()
                 .ForEach(member => {
                                        Console.WriteLine(member.PersonEmail);
                 });
 
 
             // Post a text message to the room
-            Message message = new Message();
-            message.RoomId = room.Id;
-            message.Text = "Hello World!";
+            Message message = new Message
+            {
+                RoomId = room.Id,
+                Text = "Hello World!"
+            };
             spark.Messages().Post(message);
 
 
             // Share a file with the room
-            message = new Message();
-            message.RoomId = room.Id;
-            message.Files = new[] {new Uri("http://www.webex.co.uk/ciscospark/includes/images/media_2.png") };
+            message = new Message
+            {
+                RoomId = room.Id,
+                Files = new[] {new Uri("http://www.webex.co.uk/ciscospark/includes/images/media_2.png")}
+            };
             spark.Messages().Post(message);
         }
 

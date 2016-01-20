@@ -1,5 +1,5 @@
 <html>
-<body>
+<body> 
 
 <?php
 /* Sample php script to be loaded on a web server and registered via as a webhook to the Spark API - it will receive a notification when a new message is posted and then call an external python script (sparkmess.py in this example) passing the messageid 

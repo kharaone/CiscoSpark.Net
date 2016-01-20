@@ -2,10 +2,10 @@
 {
     public class SparkConcrete : Spark
     {
-        private Client _client;
+        private readonly Client _client;
         public SparkConcrete(Client client)
         {
-            this._client = client;
+            _client = client;
         }
 
         public override IRequestBuilder<Room> Rooms()

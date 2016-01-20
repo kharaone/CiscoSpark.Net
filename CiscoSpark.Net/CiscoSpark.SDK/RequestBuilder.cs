@@ -6,7 +6,7 @@ namespace CiscoSpark.SDK
 {
     public class RequestBuilder<T>:IRequestBuilder<T> where T : new()
     {
-        private Client _client;
+        private readonly Client _client;
         private StringBuilder _pathBuilder;
         private List<string[]> _parameters;
         private Uri _url;
@@ -16,9 +16,9 @@ namespace CiscoSpark.SDK
 
         private RequestBuilder(Client client, StringBuilder pathBuilder, List<String[]> parameters)
         {
-            this._client = client;
-            this._pathBuilder = pathBuilder;
-            this._parameters = parameters;
+            _client = client;
+            _pathBuilder = pathBuilder;
+            _parameters = parameters;
         }
 
         public IRequestBuilder<T> QueryParam(string key, string value)
@@ -75,7 +75,7 @@ namespace CiscoSpark.SDK
             }
         }
 
-        public IEnumerable<T> iterate()
+        public IEnumerable<T> Iterate()
         {
             return _url == null ? _client.List<T>(_pathBuilder.ToString(), _parameters) : _client.List<T>(_url);
         }

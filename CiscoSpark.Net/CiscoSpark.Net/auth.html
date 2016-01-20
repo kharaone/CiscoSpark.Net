@@ -16,8 +16,8 @@ var randomString = function(length) {
 
 // Helper function that parses a query string into a dictionary object
 var parseQueryStr = function( queryString) {
-    var params = {}, keyvals, temp, i, l;
-    keyvals = queryString.split("&");  // Split out key/value pairs
+    var params = {}, tmp, i, l;
+    var keyvals = queryString.split("&");  // Split out key/value pairs
     for ( i = 0, l = keyvals.length; i < l; i++ ) {  // Split key/value strings into a dictionary object
         tmp = keyvals[i].split('=');
         params[tmp[0]] = tmp[1];
@@ -63,13 +63,15 @@ function tokenClick() {
 	var appClientSecret=document.getElementById('clientSecret').value;
 	var appRedirectUri=document.getElementById('redirectUri').value;
 
-	xhttp = new XMLHttpRequest(); // Create an AJAX HTTP request object
+	var xhttp = new XMLHttpRequest(); // Create an AJAX HTTP request object
 	xhttp.onreadystatechange = function() {  // Define a handler, which fires when the request completes
-		if (xhttp.readyState == 4) { // If the request state = 4 (completed)...
-			if (xhttp.status == 200) { // And the status = 200 (OK), then...
-				var authInfo = JSON.parse(xhttp.responseText); // Parse the JSON response into an object
-				document.getElementById('token').value = authInfo['access_token']; // Retrieve the access_token field, and display it
-			} else alert('Error requesting access token: ' + xhttp.statusText)
+		if (xhttp.readyState === 4) { // If the request state = 4 (completed)...
+			if (xhttp.status === 200) { // And the status = 200 (OK), then...
+			    var authInfo = JSON.parse(xhttp.responseText); // Parse the JSON response into an object
+			    document.getElementById('token').value = authInfo['access_token']; // Retrieve the access_token field, and display it
+			} else {
+			    alert('Error requesting access token: ' + xhttp.statusText);
+			}
  		}
 	}
 	xhttp.open('POST', 'https://api.ciscospark.com/v1/access_token', true); // Initialize the HTTP request object for POST to the access token URL
@@ -87,7 +89,11 @@ function tokenClick() {
 <style type="text/css">
 body {font: 14px/1.55 'CiscoSansLight', Arial,'Liberation Sans',FreeSans,sans-serif;}
 .glasspane {background: #049fd9; height: 40px; width: 850px; display: inline; float: left;}
-.glasspane h1 {opacity: 1; color: #fff; margin-top: 2px; margin-bottom: 0; font-weight: normal; font-size:25px; padding-left:10px}
+.glasspane h1 {
+    -ms-opacity: 1;
+    opacity: 1; color: #fff; margin-top: 2px; margin-bottom: 0; font-weight: normal; font-size:25px; padding-left:10px
+}
+
 .table {margin: 10px 0 0 0; float:left; background-color: #eee; padding: 10px;}
 td:first-child {width: 116px;}
 input, textarea {width: 700px; display: block;}
@@ -124,11 +130,11 @@ textarea {height: 140px;}
 		<table>
 			<tbody><tr>
 				<td>Auth Code:</td>
-				<td><input id="code" readonly=""> <button id="tokenButton" type="button" hidden="" onclick="tokenClick()">Request Access Token</button></td>
+				<td><input id="code" readonly="readonly"> <button id="tokenButton" type="button" hidden="" onclick="tokenClick()">Request Access Token</button></td>
 			</tr>
 			<tr>
 				<td>Access Token:</td> 
-				<td><textarea id="token" readonly="" style="vertical-align: top"></textarea></td>
+				<td><textarea id="token" readonly="readonly" style="vertical-align: top"></textarea></td>
 			</tr>
 		</tbody></table>
 	</div>

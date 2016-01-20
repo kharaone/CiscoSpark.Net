@@ -24,7 +24,6 @@ namespace CiscoSpark.SDK
 
 
         private readonly string _trackingId = "TrackingID";
-        public readonly string Iso8601Format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         private string _authCode;
         private string _refreshToken;
 
@@ -71,12 +70,12 @@ namespace CiscoSpark.SDK
             return JsonConvert.DeserializeObject<T>(Request(url, "GET", new T()));
         }
 
-        public class DataJsonAttributeContainer<T>
+        private class DataJsonAttributeContainer<T>
         {
             public List<T> Items { get; set; }
         }
 
-        public T DeserializeFromJson<T>(string json)
+        private T DeserializeFromJson<T>(string json)
         {
             T deserializedProduct = JsonConvert.DeserializeObject<T>(json);
             return deserializedProduct;
@@ -127,7 +126,7 @@ namespace CiscoSpark.SDK
             {
                 url = new Uri(urlStringBuilder.ToString());
             }
-            catch (MalformedUrlException e)
+            catch (UriFormatException e)
             {
                 throw new SparkException("bad url: " + urlStringBuilder, e);
             }
@@ -140,7 +139,7 @@ namespace CiscoSpark.SDK
             {
                 return HttpUtility.UrlEncode(value, Encoding.UTF8);
             }
-            catch (UnsupportedEncodingException ex)
+            catch (Exception ex)
             {
                 throw new SparkException(ex);
             }
@@ -221,7 +220,7 @@ namespace CiscoSpark.SDK
             return Request(url, method, body);
         }
 
-        public string Request<T>(Uri uri, string method, T body)
+        private string Request<T>(Uri uri, string method, T body)
         {
             if (_accessToken == null)
             {
@@ -235,13 +234,13 @@ namespace CiscoSpark.SDK
             {
                 return DoRequest(uri, method, body);
             }
-            catch (NotAuthenticatedException ex)
+            catch (NotAuthenticatedException)
             {
                 if (Authenticate())
                 {
                     return DoRequest(uri, method, body);
                 }
-                throw ex;
+                throw;
             }
         }
 
@@ -250,7 +249,6 @@ namespace CiscoSpark.SDK
             try
             {
                 HttpClient connection = GetConnection(url);
-                HttpResponseMessage response;
                 var trackingId = connection.DefaultRequestHeaders.GetValues(_trackingId).Single();
 
                 if (_logger != null)
@@ -258,13 +256,13 @@ namespace CiscoSpark.SDK
                     _logger.Info("Request {0}: {1} {2}", trackingId, method, connection.BaseAddress);
                 }
                 var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-                var bodyJSON = JsonConvert.SerializeObject(body, settings);
+                var bodyJson = JsonConvert.SerializeObject(body, settings);
                 if (_logger != null)
                 {
-                    _logger.Info("Request Body {0}: {1}", trackingId, bodyJSON);
+                    _logger.Info("Request Body {0}: {1}", trackingId, bodyJson);
 
                 }
-                response = Query(url, bodyJSON, connection, method);
+                var response = Query(url, bodyJson, connection, method);
 
 
                 if (response.IsSuccessStatusCode)

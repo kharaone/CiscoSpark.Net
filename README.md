@@ -1,7 +1,7 @@
 # CiscoSpark.Net
 ==============
-Python Library to Interface to Cisco Spark REST API
----------------------------------------------------
+.net Library to Interface to Cisco Spark REST API
+---------------------------------------------------  
 using requests >2.4 - install instructions here:
 http://docs.python-requests.org/en/latest/user/install/
 

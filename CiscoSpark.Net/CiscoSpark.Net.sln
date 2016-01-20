@@ -9,6 +9,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiscoSpark.SDK", "CiscoSpar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CiscoSpark.Sample", "CiscoSpark.Sample\CiscoSpark.Sample.csproj", "{8AF6A07D-B54B-4D4A-90CF-65D4B2BBEFD3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1595963B-068E-4299-86C3-1501E0693CEF}"
+	ProjectSection(SolutionItems) = preProject
+		..\ciscospark.php = ..\ciscospark.php
+		..\createwebhook.py = ..\createwebhook.py
+		..\example.py = ..\example.py
+		..\example2.py = ..\example2.py
+		..\example3.py = ..\example3.py
+		..\examplelistpeople.py = ..\examplelistpeople.py
+		..\pyCiscoSpark.py = ..\pyCiscoSpark.py
+		..\pyCiscoSpark.pyc = ..\pyCiscoSpark.pyc
+		..\README.md = ..\README.md
+		..\sparkgoogle.py = ..\sparkgoogle.py
+		..\sparkmess.py = ..\sparkmess.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

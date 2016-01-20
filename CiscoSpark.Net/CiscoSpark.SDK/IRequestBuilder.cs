@@ -16,6 +16,6 @@ namespace CiscoSpark.SDK
         T Put(T body);
         T Get();
         void Delete();
-        IEnumerable<T> iterate();
+        IEnumerable<T> Iterate();
     }
 }
